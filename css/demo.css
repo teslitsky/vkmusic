@@ -1,0 +1,48 @@
+/*!
+ * Flat UI Free v2.2.1 (http://designmodo.github.io/Flat-UI/)
+ * Copyright 2013-2014 Designmodo, Inc.
+ */
+
+.container {
+  max-width: 970px !important;
+  padding: 0 20px;
+}
+
+.demo-headline {
+  padding: 73px 0 110px;
+  text-align: center;
+}
+
+.demo-logo {
+  margin: 10px 0;
+  font: 900 90px/100px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: -2px;
+}
+
+.demo-logo .logo {
+  height: 181px;
+  margin: 0 auto 26px;
+  overflow: hidden;
+  text-indent: -9999em;
+  background: url(../img/demo/logo-mask.png) center 0 no-repeat;
+  background-size: 236px 181px;
+}
+
+.demo-logo small {
+  display: block;
+  padding-top: 5px;
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(52, 73, 94, .3);
+  letter-spacing: 0;
+}
+
+.demo-row {
+  margin-bottom: 20px;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 2) {
+  .logo {
+    background-image: url(../img/demo/logo-mask-2x.png);
+  }
+}

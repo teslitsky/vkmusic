@@ -9,15 +9,15 @@ class Downloader
 {
     /**
      * @param string $link
-     * @return string
+     * @return void
      */
     public function download($link)
     {
-        $url = $title = null;
+        $title = null;
         $client = new Client();
 
         try {
-            $response = $client->get("https://api.vk.com/method/wall.getById?posts=-{$link}&callback=?");
+            $response = $client->get($link);
             $json = $response->json();
             $attachments = $json['response'][0]['attachments'];
             foreach ($attachments as $attachment) {
@@ -57,8 +57,6 @@ class Downloader
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
-
-        return $link . ' downloaded. ' . PHP_EOL;
     }
 
     public function remote_filesize($url)

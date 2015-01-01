@@ -34,7 +34,7 @@ class LinkResolver
         return $link;
     }
 
-    private function getWallLink($postID)
+    public function getWallLink($postID)
     {
         return "https://api.vk.com/method/wall.getById?posts={$postID}&callback=?";
     }

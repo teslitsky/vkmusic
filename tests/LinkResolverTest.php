@@ -1,6 +1,6 @@
 <?php
 
-use VkUtils\LinkResolver;
+namespace VkUtils;
 
 class LinkResolverTest extends \PHPUnit_Framework_TestCase
 {

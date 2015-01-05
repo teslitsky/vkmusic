@@ -1,6 +1,6 @@
 <?php
 
-namespace VkUtils\exceptions;
+namespace VkUtils\Exceptions;
 
 class Exception extends \Exception
 {

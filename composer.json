@@ -8,6 +8,9 @@
         "phpunit/phpunit": "4.4.*"
     },
     "autoload": {
-        "psr-4": {"VkUtils\\": "src/"}
+        "psr-4": {
+            "VkUtils\\": "src/",
+            "VkUtils\\tests\\": "tests/"
+        }
     }
 }

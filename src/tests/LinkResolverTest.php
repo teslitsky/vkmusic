@@ -1,8 +1,10 @@
 <?php
 
+namespace VkUtils\tests;
+
 use VkUtils\LinkResolver;
 
-class LinkResolverTest extends \PHPUnit_Framework_TestCase
+class LinkResolverTest extends TestCase
 {
     public function testResolveWallLink()
     {

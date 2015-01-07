@@ -2,14 +2,17 @@
 
 namespace VkUtils;
 
-use VkUtils\Exceptions\NoResolvedParams;
+use VkUtils\Exceptions\InvalidLink;
+use VkUtils\Exceptions\InvalidLinkWithoutParams;
 
 class LinkResolver
 {
     /**
-     * @param string $url
-     * @return string $postID
-     * @throws NoResolvedParams
+     * Get resolved link for post
+     * @param string $url Post URL
+     * @return string $link
+     * @throws InvalidLink
+     * @throws InvalidLinkWithoutParams
      */
     public function resolve($url)
     {
@@ -18,17 +21,18 @@ class LinkResolver
         parse_str($query, $params);
 
         if (!count($params)) {
-            throw new NoResolvedParams('No resolved params by URL ' . $url);
+            throw new InvalidLinkWithoutParams($url);
         }
 
         if (array_key_exists('w', $params)) {
             $param = current(explode('/', $params['w']));
             $postID = str_replace('wall', '', $param);
-            $link = $this->getWallLink($postID);
-        }
 
-        if (!$link) {
-            throw new NoResolvedParams('No resolved params by URL ' . $url);
+            if ($postID == $param) {
+                throw new InvalidLink($url);
+            }
+
+            $link = $this->getWallLink($postID);
         }
 
         return $link;

@@ -13,14 +13,24 @@ class LinkResolverTest extends TestCase
         $this->assertEquals('https://api.vk.com/method/wall.getById?posts=-73467419_894&callback=?', $link);
     }
 
-    public function testInvalidLink()
+    public function testInvalidLinkWithoutParams()
     {
         $this->setExpectedException(
-            'VkUtils\Exceptions\NoResolvedParams',
-            'No resolved params by URL https://vk.com/deep_01'
+            'VkUtils\Exceptions\InvalidLinkWithoutParams',
+            'https://vk.com/deep_01'
         );
         $resolver = new LinkResolver();
         $resolver->resolve('https://vk.com/deep_01');
+    }
+
+    public function testInvalidLink()
+    {
+        $this->setExpectedException(
+            'VkUtils\Exceptions\InvalidLink',
+            'https://vk.com/deep_01?w=wal-73467419_894'
+        );
+        $resolver = new LinkResolver();
+        $resolver->resolve('https://vk.com/deep_01?w=wal-73467419_894');
     }
 
     public function testWallGroupLink()

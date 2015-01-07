@@ -2,7 +2,7 @@
 
 namespace VkUtils\Exceptions;
 
-class NoResolvedParams extends Exception
+class InvalidLink extends Exception
 {
 
 }

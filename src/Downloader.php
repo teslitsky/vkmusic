@@ -2,68 +2,41 @@
 
 namespace VkUtils;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-
 class Downloader
 {
     /**
-     * @param string $link
+     * @param Audio $audio
      * @return void
      */
-    public function download($link)
+    public function download(Audio $audio)
     {
-        $title = null;
-        $client = new Client();
-
-        try {
-            $response = $client->get($link);
-            $json = $response->json();
-            $attachments = $json['response'][0]['attachments'];
-            foreach ($attachments as $attachment) {
-                if ($attachment['type'] != 'audio') {
-                    continue;
-                }
-
-                $link = filter_var($attachment['audio']['url'], FILTER_SANITIZE_STRING);
-                $artist = html_entity_decode(filter_var($attachment['audio']['artist'], FILTER_SANITIZE_STRING));
-                $title = html_entity_decode(filter_var($attachment['audio']['title'], FILTER_SANITIZE_STRING));
-                $title = $artist . ' - ' . $title;
-            }
-
-            $size = $this->remote_filesize($link);
-            $header = 'Content-Disposition: attachment; filename="' . $title . '.mp3"';
-
-            if ($size) {
-                header('Content-Description: File Transfer');
-                header('Content-Type: application/octet-stream');
-                header($header);
-                header('Content-Transfer-Encoding: binary');
-                header('Expires: 0');
-                header('Cache-Control: must-revalidate');
-                header('Pragma: public');
-                header('Content-Length: ' . $size);
-                ob_clean();
-                flush();
-                readfile($link);
-                exit;
-            }
-
-        } catch (RequestException $e) {
-            echo $e->getRequest();
-            if ($e->hasResponse()) {
-                echo $e->getResponse();
-            }
-        } catch (\Exception $e) {
-            echo $e->getMessage();
+        $size = $this->remoteFileSize($audio->getLink());
+        if ($size) {
+            $content = 'Content-Disposition: attachment; filename="' . $audio->getFullTitle() . '.mp3"';
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header($content);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . $size);
+            ob_clean();
+            flush();
+            readfile($audio->getLink());
+            exit;
         }
     }
 
-    public function remote_filesize($url)
+    /**
+     * @param string $url URL to file
+     * @return int File size
+     */
+    public function remoteFileSize($url)
     {
         $regex = '/^Content-Length: *+\K\d++$/im';
         if (!$fp = @fopen($url, 'rb')) {
-            return false;
+            return 0;
         }
 
         if (isset($http_response_header) && preg_match($regex, implode("\n", $http_response_header), $matches)

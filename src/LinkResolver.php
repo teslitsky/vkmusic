@@ -16,7 +16,6 @@ class LinkResolver
      */
     public function resolve($url)
     {
-        $link = false;
         $query = parse_url($url, PHP_URL_QUERY);
         parse_str($query, $params);
 
@@ -32,10 +31,10 @@ class LinkResolver
                 throw new InvalidLink($url);
             }
 
-            $link = $this->getWallLink($postID);
+            return $this->getWallLink($postID);
         }
 
-        return $link;
+        throw new InvalidLink($url);
     }
 
     public function getWallLink($postID)

@@ -5,6 +5,7 @@ namespace VkUtils;
 class Downloader
 {
     /**
+     * Download audio attachment
      * @param Audio $audio
      * @return void
      */

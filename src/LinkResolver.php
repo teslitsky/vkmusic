@@ -37,6 +37,10 @@ class LinkResolver
         throw new InvalidLink($url);
     }
 
+    /**
+     * @param string $postID Post ID
+     * @return string Link for post on the wall
+     */
     public function getWallLink($postID)
     {
         return "https://api.vk.com/method/wall.getById?posts={$postID}&callback=?";

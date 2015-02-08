@@ -63,6 +63,11 @@ class AudioParser
         return $serializer->serialize($data, 'json');
     }
 
+    /**
+     * Decode data from JSON
+     * @param mixed $data Input data
+     * @return mixed mixed Decoded data
+     */
     public function decodeJson($data)
     {
         $encoders = array(new JsonEncoder());

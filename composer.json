@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.9",
         "guzzlehttp/guzzle": "~5.0",
         "monolog/monolog": "1.11.*@dev",
         "symfony/serializer": "3.0.*@dev"

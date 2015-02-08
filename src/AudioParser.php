@@ -7,6 +7,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use VkUtils\Exceptions\EmptyAttachments;
+use VkUtils\Exceptions\InvalidLink;
 
 class AudioParser
 {
@@ -15,15 +16,20 @@ class AudioParser
      * @param string $postLink Link for post
      * @return array Parsed Audio objects
      * @throws EmptyAttachments
+     * @throws InvalidLink
      */
     public function parse($postLink)
     {
+        if (empty($postLink)) {
+            throw new InvalidLink($postLink);
+        }
+
         $files = [];
         $client = new Client();
 
         $response = $client->get($postLink);
         $json = $response->json();
-        if (!isset($json['response'][0])) {
+        if (!isset($json['response'][0]['attachments'])) {
             throw new EmptyAttachments($postLink);
         }
 

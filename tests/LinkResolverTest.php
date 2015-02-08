@@ -33,6 +33,16 @@ class LinkResolverTest extends TestCase
         $resolver->resolve('https://vk.com/deep_01?w=wal-73467419_894');
     }
 
+    public function testInvalidLinkWithoutWallParam()
+    {
+        $this->setExpectedException(
+            'VkUtils\Exceptions\InvalidLink',
+            'https://vk.com/deep_01?x=y'
+        );
+        $resolver = new LinkResolver();
+        $resolver->resolve('https://vk.com/deep_01?x=y');
+    }
+
     public function testWallGroupLink()
     {
         $resolver = new LinkResolver();

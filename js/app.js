@@ -1,5 +1,5 @@
 Zepto(function ($) {
-    $(document).on('change', '#link', function () {
+    $(document).on('change paste keyup', '#link', function () {
         var input = $(this);
         var link = input.val();
         if (link.length) {
@@ -12,7 +12,7 @@ Zepto(function ($) {
                     if ($.isArray(audio) && audio.length) {
                         removeError(input);
                         $.each(audio, function (index, item) {
-                            var btn = '<button class="btn btn-primary btn-xs" data-attachment=' + $.param({attachment: item}) + '>Скачать</button>';
+                            var btn = '<button class="btn btn-primary btn-xs right" data-attachment=' + $.param({attachment: item}) + '>Скачать</button>';
                             $('#audio').append('<p><small>' + item.fullTitle + '</small>' + btn + '</p>');
                         });
                     } else {

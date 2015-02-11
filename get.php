@@ -3,6 +3,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use VkUtils\LinkResolver;
+use VkUtils\Request;
 use VkUtils\AudioParser;
 use VkUtils\Exceptions\Exception;
 use Monolog\Logger;
@@ -15,7 +16,8 @@ $log->pushHandler(new StreamHandler(__DIR__ . '/../logs/main.log', Logger::DEBUG
 $url = html_entity_decode(filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL));
 
 $resolver = new LinkResolver();
-$parser = new AudioParser();
+$request = new Request();
+$parser = new AudioParser($request);
 $result = [
     'error' => true,
     'data'  => null,
@@ -34,5 +36,5 @@ try {
     $log->addError($e->getMessage());
 }
 
-echo $parser->getJsonRequest($result);
+echo $request->getJsonRequest($result);
 exit;

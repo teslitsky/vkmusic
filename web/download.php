@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use VkUtils\Audio;
 use VkUtils\Request;
@@ -11,7 +11,7 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
 $log = new Logger('main');
-$log->pushHandler(new StreamHandler(__DIR__ . '/../logs/main.log', Logger::DEBUG));
+$log->pushHandler(new StreamHandler(__DIR__ . '/../../logs/main.log', Logger::DEBUG));
 
 $attachment = $_GET['attachment'];
 $audio = new Audio();

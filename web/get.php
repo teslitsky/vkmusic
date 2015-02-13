@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use VkUtils\LinkResolver;
 use VkUtils\Request;
@@ -11,7 +11,7 @@ use Monolog\Handler\StreamHandler;
 use GuzzleHttp\Exception\RequestException;
 
 $log = new Logger('main');
-$log->pushHandler(new StreamHandler(__DIR__ . '/../logs/main.log', Logger::DEBUG));
+$log->pushHandler(new StreamHandler(__DIR__ . '/../../logs/main.log', Logger::DEBUG));
 
 $url = html_entity_decode(filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL));
 

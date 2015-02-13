@@ -3,7 +3,7 @@ Zepto(function ($) {
         var input = $(this);
         var link = input.val();
         if (link.length) {
-            $.getJSON('/get.php?url=' + encodeURIComponent(link), function (result) {
+            $.getJSON('get.php?url=' + encodeURIComponent(link), function (result) {
                 $('#audio').empty();
                 if (result && result.error) {
                     setError(input);
@@ -25,7 +25,7 @@ Zepto(function ($) {
 
     $(document).on('click', 'button', function (e) {
         e.preventDefault();
-        window.location = '/download.php?' + $(this).data('attachment');
+        window.location = 'download.php?' + $(this).data('attachment');
     });
 
     function setError(input) {

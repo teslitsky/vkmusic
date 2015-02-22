@@ -33,6 +33,16 @@
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
 <script>window.Zepto || document.write('<script src="dist/js/zepto.min.js">\x3C/script>')</script>
+<script type="text/template" id="audioList">
+    <% _.each(items, function (audio, key, list) { %>
+    <div>
+        <small><%= audio.fullTitle %></small>
+        <div class="right">
+            <button class="btn btn-primary btn-xs" data-attachment="<%= $.param({attachment: audio}) %>">Скачать</button>
+        </div>
+    </div>
+    <% }); %>
+</script>
 <script src="dist/js/main.min.js"></script>
 </body>
 </html>

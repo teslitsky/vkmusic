@@ -4,17 +4,14 @@ Zepto(function ($) {
         var link = input.val();
         if (link.length) {
             $.getJSON('get.php?url=' + encodeURIComponent(link), function (result) {
-                $('#audio').empty();
                 if (result && result.error) {
                     setError(input);
                 } else {
                     var audio = result.data;
                     if ($.isArray(audio) && audio.length) {
                         removeError(input);
-                        $.each(audio, function (index, item) {
-                            var btn = '<button class="btn btn-primary btn-xs right" data-attachment=' + $.param({attachment: item}) + '>Скачать</button>';
-                            $('#audio').append('<p><small>' + item.fullTitle + '</small>' + btn + '</p>');
-                        });
+                        var template = _.template($("#audioList").html());
+                        $("#audio").html(template({items: audio}));
                     } else {
                         setError(input);
                     }

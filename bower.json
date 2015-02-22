@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "zepto": "#1.1.4",
-    "bootstrap": "#3.3.2"
+    "bootstrap": "*",
+    "underscore": "*"
   }
 }

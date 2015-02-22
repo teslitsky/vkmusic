@@ -34,7 +34,10 @@ gulp.task('images', function () {
 });
 
 gulp.task('scripts', function () {
-    return gulp.src(['src/resources/js/**/*.js'])
+    return gulp.src([
+        'src/resources/bower_components/underscore/underscore-min.js',
+        'src/resources/js/**/*.js'
+    ])
         .pipe(concat('main.js'))
         .pipe(rename({suffix: '.min'}))
         .pipe(uglify())
@@ -52,7 +55,7 @@ gulp.task('build', function (callback) {
 
 gulp.task('default', ['build']);
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     // Watch CSS files
     gulp.watch('src/resources/css/**/*.css', ['styles']);
 

@@ -23,6 +23,11 @@ class Audio
     protected $link;
 
     /**
+     * @var int Audio duration in seconds
+     */
+    protected $duration = 0;
+
+    /**
      * @return string Artist name
      */
     public function getArtist()
@@ -71,10 +76,37 @@ class Audio
     }
 
     /**
+     * @return int Audio duration in seconds
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @param string $duration Audio duration in seconds
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = (int)$duration;
+    }
+
+    /**
      * @return string Full audio title
      */
     public function getFullTitle()
     {
         return $this->artist . ' - ' . $this->title;
+    }
+
+    /**
+     * @return string Formatted audio duration like 01:23
+     */
+    public function getFormattedDuration()
+    {
+        $minutes = floor($this->duration / 60);
+        $seconds = $this->duration - ($minutes * 60);
+
+        return sprintf("%02d:%02d", $minutes, $seconds);
     }
 }

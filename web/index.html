@@ -38,6 +38,7 @@
     <div>
         <small><%= audio.fullTitle %></small>
         <div class="right">
+            <small><%= audio.formattedDuration %></small>
             <button class="btn btn-primary btn-xs" data-attachment="<%= $.param({attachment: audio}) %>">Скачать</button>
         </div>
     </div>

@@ -50,6 +50,7 @@ class AudioParser
             $audio->setArtist($this->request->sanitizeParam($attachment['audio']['artist']));
             $audio->setTitle($this->request->sanitizeParam($attachment['audio']['title']));
             $audio->setLink($this->request->sanitizeParam($attachment['audio']['url']));
+            $audio->setDuration($this->request->sanitizeParam($attachment['audio']['duration']));
             $files[] = $audio;
         }
 

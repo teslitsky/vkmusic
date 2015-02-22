@@ -29,6 +29,7 @@ class RequestTest extends TestCase
         $audio2->setLink('https://vk.com/link/to/audio2');
         $audio2->setTitle('Demo audio 2');
         $audio2->setArtist('Demo Artist 2');
+        $audio2->setDuration(83);
 
         return [[[$audio, $audio2, '', 'string', false, null]]];
     }
@@ -40,7 +41,7 @@ class RequestTest extends TestCase
     {
         $request = new Request();
         $this->assertEquals(
-            '[{"artist":"Demo Artist","title":"Demo audio","link":"https:\/\/vk.com\/link\/to\/audio","fullTitle":"Demo Artist - Demo audio"},{"artist":"Demo Artist 2","title":"Demo audio 2","link":"https:\/\/vk.com\/link\/to\/audio2","fullTitle":"Demo Artist 2 - Demo audio 2"},"","string",false,null]',
+            '[{"artist":"Demo Artist","title":"Demo audio","link":"https:\/\/vk.com\/link\/to\/audio","duration":0,"fullTitle":"Demo Artist - Demo audio","formattedDuration":"00:00"},{"artist":"Demo Artist 2","title":"Demo audio 2","link":"https:\/\/vk.com\/link\/to\/audio2","duration":83,"fullTitle":"Demo Artist 2 - Demo audio 2","formattedDuration":"01:23"},"","string",false,null]',
             $request->getJsonRequest($provider)
         );
     }
@@ -52,16 +53,20 @@ class RequestTest extends TestCase
     {
         $expected = [
             0 => [
-                'artist'    => 'Demo Artist',
-                'title'     => 'Demo audio',
-                'link'      => 'https://vk.com/link/to/audio',
-                'fullTitle' => 'Demo Artist - Demo audio',
+                'artist'            => 'Demo Artist',
+                'title'             => 'Demo audio',
+                'link'              => 'https://vk.com/link/to/audio',
+                'fullTitle'         => 'Demo Artist - Demo audio',
+                'duration'          => 0,
+                'formattedDuration' => '00:00',
             ],
             1 => [
-                'artist'    => 'Demo Artist 2',
-                'title'     => 'Demo audio 2',
-                'link'      => 'https://vk.com/link/to/audio2',
-                'fullTitle' => 'Demo Artist 2 - Demo audio 2',
+                'artist'            => 'Demo Artist 2',
+                'title'             => 'Demo audio 2',
+                'link'              => 'https://vk.com/link/to/audio2',
+                'fullTitle'         => 'Demo Artist 2 - Demo audio 2',
+                'duration'          => 83,
+                'formattedDuration' => '01:23',
             ],
             2 => '',
             3 => 'string',

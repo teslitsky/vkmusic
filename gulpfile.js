@@ -57,10 +57,10 @@ gulp.task('default', ['build']);
 
 gulp.task('watch', function () {
     // Watch CSS files
-    gulp.watch('src/resources/css/**/*.css', ['styles']);
+    gulp.watch('src/resources/css/**/*.css', { interval: 100 }, ['styles']);
 
     // Watch JS files
-    gulp.watch('src/resources/js/**/*.js', ['scripts']);
+    gulp.watch('src/resources/js/**/*.js', { interval: 100 }, ['scripts']);
 
     // Watch image files
     gulp.watch('src/resources/images/**/*', ['images']);

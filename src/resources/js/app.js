@@ -1,5 +1,5 @@
 Zepto(function ($) {
-    $(document).on('change paste keyup', '#link', function () {
+    $(document).on('change paste keyup', '#link', _.debounce(function () {
         var input = $(this);
         var link = input.val();
         if (link.length) {
@@ -18,7 +18,7 @@ Zepto(function ($) {
                 }
             });
         }
-    });
+    }, 800));
 
     $(document).on('click', 'button', function (e) {
         e.preventDefault();

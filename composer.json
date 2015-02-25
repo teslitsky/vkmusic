@@ -1,5 +1,5 @@
 {
-    "name": "VkMusic",
+    "name": "teslitsky/vkmusic",
     "description": "Download music from vk.com for free without hassle",
     "license": "MIT",
     "require": {

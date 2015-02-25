@@ -25,7 +25,6 @@ class Downloader
             ob_clean();
             flush();
             readfile($audio->getLink());
-            exit;
         }
     }
 

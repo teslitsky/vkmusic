@@ -3,7 +3,7 @@
 namespace VkUtils;
 
 use GuzzleHttp\Client;
-use Guzzle\Http\Message\RequestInterface as GuzzleRequest;
+use GuzzleHttp\Message\ResponseInterface as GuzzleRequest;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;

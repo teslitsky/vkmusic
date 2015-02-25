@@ -1,4 +1,7 @@
 {
+    "name": "VkMusic",
+    "description": "Download music from vk.com for free without hassle",
+    "license": "MIT",
     "require": {
         "php": ">=5.5.9",
         "guzzlehttp/guzzle": "~5.0",

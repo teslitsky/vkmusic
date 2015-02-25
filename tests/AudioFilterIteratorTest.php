@@ -6,7 +6,7 @@ use VkUtils\AudioFilterIterator;
 
 class AudioFilterIteratorTest extends TestCase
 {
-    public function testGetters()
+    public function testIterator()
     {
         $audioArray = [
             0 => [
@@ -32,15 +32,15 @@ class AudioFilterIteratorTest extends TestCase
             ],
         ];
 
-        $counterAudio = 0;
+        $audioCounter = 0;
         $iterator = new AudioFilterIterator($audioArray);
         foreach ($iterator as $key => $audio) {
-            $counterAudio++;
+            $audioCounter++;
         }
 
-        $counterNotAudio = count($audioArray) - $counterAudio;
+        $counterNotValid = count($audioArray) - $audioCounter;
 
-        $this->assertEquals(2, $counterAudio);
-        $this->assertEquals(5, $counterNotAudio);
+        $this->assertEquals(2, $audioCounter);
+        $this->assertEquals(5, $counterNotValid);
     }
 }

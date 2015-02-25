@@ -37,12 +37,12 @@ class RequestTest extends TestCase
     /**
      * @dataProvider arrayParamProvider
      */
-    public function testGetJsonRequest($provider)
+    public function testEncodeJson($provider)
     {
         $request = new Request();
         $this->assertEquals(
             '[{"artist":"Demo Artist","title":"Demo audio","link":"https:\/\/vk.com\/link\/to\/audio","duration":0,"fullTitle":"Demo Artist - Demo audio","formattedDuration":"00:00"},{"artist":"Demo Artist 2","title":"Demo audio 2","link":"https:\/\/vk.com\/link\/to\/audio2","duration":83,"fullTitle":"Demo Artist 2 - Demo audio 2","formattedDuration":"01:23"},"","string",false,null]',
-            $request->getJsonRequest($provider)
+            $request->encodeJson($provider)
         );
     }
 
@@ -74,7 +74,21 @@ class RequestTest extends TestCase
             5 => '',
         ];
         $request = new Request();
-        $result = $request->getJsonRequest($provider);
+        $result = $request->encodeJson($provider);
         $this->assertEquals($expected, $request->decodeJson($result));
+    }
+
+    public function testGetRequest()
+    {
+        $request = new Request();
+        $result = $request->get('http://jsonplaceholder.typicode.com/posts/1');
+        $this->assertInstanceOf('\GuzzleHttp\Message\Response', $result);
+    }
+
+    public function testGetJsonRequest()
+    {
+        $request = new Request();
+        $result = $request->getJson('http://jsonplaceholder.typicode.com/posts/1');
+        $this->assertTrue(is_array($result) && count($result));
     }
 }

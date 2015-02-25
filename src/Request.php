@@ -2,27 +2,59 @@
 
 namespace VkUtils;
 
+use GuzzleHttp\Client;
+use Guzzle\Http\Message\RequestInterface as GuzzleRequest;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class Request
+class Request implements RequestInterface
 {
     /**
      * @var SerializerInterface
      */
-    protected $serializer;
+    private $serializer;
+
+    /**
+     * @var Client
+     */
+    private $client;
 
     public function __construct()
     {
         $encoders = array(new JsonEncoder());
         $normalizers = array(new GetSetMethodNormalizer());
         $this->serializer = new Serializer($normalizers, $encoders);
+        $this->client = new Client();
     }
 
     /**
-     * @param mixed $param Input param for sanitize
+     * Make GET request
+     * @param string $url Request URL
+     * @param array $options Request options
+     * @return GuzzleRequest
+     * @throws \RuntimeException
+     */
+    public function get($url = null, $options = [])
+    {
+        return $this->client->get($url, $options);
+    }
+
+    /**
+     * Make GET request and return JSON encoded result
+     * @param string $url Request URL
+     * @param array $options Request options
+     * @return array
+     * @throws \RuntimeException
+     */
+    public function getJson($url = null, $options = [])
+    {
+        return $this->client->get($url, $options)->json();
+    }
+
+    /**
+     * @param string $param Input param for sanitize
      * @return string Sanitized param
      */
     public function sanitizeParam($param)
@@ -35,7 +67,7 @@ class Request
      * @param mixed $data Input data
      * @return string JSON encoded data
      */
-    public function getJsonRequest($data)
+    public function encodeJson($data)
     {
         return $this->serializer->serialize($data, 'json');
     }

@@ -15,8 +15,8 @@ $log->pushHandler(new StreamHandler(__DIR__ . '/../../logs/main.log', Logger::DE
 
 $url = html_entity_decode(filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL));
 
-$resolver = new LinkResolver();
 $request = new Request();
+$resolver = new LinkResolver($request);
 $parser = new AudioParser($request);
 $result = [
     'error' => true,
@@ -24,8 +24,9 @@ $result = [
 ];
 
 try {
-    $postLink = $resolver->resolve($url);
-    $audio = $parser->parse($postLink);
+    $link = $resolver->resolve($url);
+
+    $audio = $parser->parse($link);
     $result = [
         'error' => false,
         'data'  => $audio,
@@ -36,5 +37,4 @@ try {
     $log->addError($e->getMessage());
 }
 
-echo $request->getJsonRequest($result);
-exit;
+echo $request->encodeJson($result);

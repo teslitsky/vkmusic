@@ -2,56 +2,70 @@
 
 namespace VkUtils;
 
-use GuzzleHttp\Client;
 use VkUtils\Exceptions\EmptyAttachments;
 use VkUtils\Exceptions\InvalidLink;
+use VkUtils\Exceptions\UnexpectedError;
 
 class AudioParser
 {
     /**
-     * @var Request
+     * @var RequestInterface
      */
     private $request;
 
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      */
-    public function __construct(Request $request)
+    public function __construct(RequestInterface $request)
     {
         $this->request = $request;
     }
 
     /**
+     * @return RequestInterface
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
      * Return parsed array of Audio objects
-     * @param string $postLink Link for post
+     * @param string $link Link for post
      * @return array Parsed Audio objects
      * @throws EmptyAttachments
      * @throws InvalidLink
+     * @throws UnexpectedError
      */
-    public function parse($postLink)
+    public function parse($link)
     {
-        if (empty($postLink)) {
-            throw new InvalidLink($postLink);
+        if (empty($link)) {
+            throw new InvalidLink($link);
         }
 
         $files = [];
-        $client = new Client();
 
-        $response = $client->get($postLink);
-        $json = $response->json();
-        if (!isset($json['response'][0]['attachments'])) {
-            throw new EmptyAttachments($postLink);
+        $result = $this->getRequest()->getJson($link);
+
+        if (isset($result['error'])) {
+            throw new UnexpectedError($this->getRequest()->encodeJson($result['error']));
         }
 
-        $attachments = $json['response'][0]['attachments'];
-        $iterator = new AudioFilterIterator($attachments);
-        foreach ($iterator as $attachment) {
-            $audio = new Audio();
-            $audio->setArtist($this->request->sanitizeParam($attachment['audio']['artist']));
-            $audio->setTitle($this->request->sanitizeParam($attachment['audio']['title']));
-            $audio->setLink($this->request->sanitizeParam($attachment['audio']['url']));
-            $audio->setDuration($this->request->sanitizeParam($attachment['audio']['duration']));
-            $files[] = $audio;
+        if (!isset($result['response']) || !count($result['response'])) {
+            throw new EmptyAttachments($link);
+        }
+
+        $postIterator = new PostFilterIterator($result['response']);
+        foreach ($postIterator as $post) {
+            $audioIterator = new AudioFilterIterator($post['attachments']);
+            foreach ($audioIterator as $attachment) {
+                $audio = new Audio();
+                $audio->setArtist($this->getRequest()->sanitizeParam($attachment['audio']['artist']));
+                $audio->setTitle($this->getRequest()->sanitizeParam($attachment['audio']['title']));
+                $audio->setLink($this->getRequest()->sanitizeParam($attachment['audio']['url']));
+                $audio->setDuration($this->getRequest()->sanitizeParam($attachment['audio']['duration']));
+                $files[] = $audio;
+            }
         }
 
         return $files;

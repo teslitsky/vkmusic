@@ -3,12 +3,14 @@ Zepto(function ($) {
         var input = $(this);
         var link = input.val();
         if (link.length) {
-            $.getJSON('get.php?url=' + encodeURIComponent(link), function (result) {
-                if (result && result.error) {
+            $('#audio').empty();
+            $.post('get', {url: link}, function (response) {
+                var response = $.parseJSON(response);
+                if (!response.data || response.error) {
                     setError(input, 'Введите корректную ссылку');
                 } else {
-                    var audio = result.data;
-                    if ($.isArray(audio) && audio.length) {
+                    var audio = response.data;
+                    if (_.isArray(audio) && !_.isEmpty(audio)) {
                         removeError(input);
                         var template = _.template($('#audioList').html());
                         $('#audio').html(template({items: audio}));
@@ -24,7 +26,7 @@ Zepto(function ($) {
 
     $(document).on('click', 'button', function (e) {
         e.preventDefault();
-        window.location = 'download.php?' + $(this).data('attachment');
+        window.location = 'download/' + encodeURIComponent($(this).data('attachment'));
     });
 
     function setError(input, error) {

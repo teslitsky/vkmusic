@@ -1,13 +1,17 @@
 <?php
 
-use VkUtils\LinkResolver;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+
 use VkUtils\Audio;
 use VkUtils\AudioParser;
 use VkUtils\Downloader;
+use VkUtils\LinkResolver;
+use VkUtils\Request as VkRequest;
 use VkUtils\Exceptions\Exception;
 use GuzzleHttp\Exception\RequestException;
-use Symfony\Component\HttpFoundation\Request;
 
+/** @var $app Application */
 $app->register(new Silex\Provider\MonologServiceProvider(), [
     'monolog.logfile' => __DIR__ . '/../logs/development.log',
 ]);
@@ -15,6 +19,22 @@ $app->register(new Silex\Provider\MonologServiceProvider(), [
 $app->register(new Silex\Provider\TwigServiceProvider(), [
     'twig.path' => __DIR__ . '/../views',
 ]);
+
+$app['downloader'] = $app->share(function () {
+    return new Downloader();
+});
+
+$app['vkrequest'] = $app->share(function () {
+    return new VkRequest();
+});
+
+$app['linkresolver'] = $app->share(function (Application $app) {
+    return new LinkResolver($app['vkrequest']);
+});
+
+$app['parser'] = $app->share(function (Application $app) {
+    return new AudioParser($app['vkrequest']);
+});
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
@@ -30,20 +50,16 @@ $app->get('/', function () use ($app) {
 })->bind('homepage');
 
 $app->post('/get', function (Request $request) use ($app) {
-    $url = urldecode(filter_var($request->request->get('url'), FILTER_SANITIZE_URL));
+    $url = urldecode($app['vkrequest']->sanitizeParam($request->request->get('url'), FILTER_SANITIZE_URL));
 
-    $request = new \VkUtils\Request();
-    $resolver = new LinkResolver($request);
-    $parser = new AudioParser($request);
     $result = [
         'error' => true,
         'data'  => null,
     ];
 
     try {
-        $link = $resolver->resolve($url);
-
-        $audio = $parser->parse($link);
+        $link = $app['linkresolver']->resolve($url);
+        $audio = $app['parser']->parse($link);
         $result = [
             'error' => false,
             'data'  => $audio,
@@ -54,20 +70,19 @@ $app->post('/get', function (Request $request) use ($app) {
         $app['monolog']->addError($e->getMessage());
     }
 
-    return $request->encodeJson($result);
+    return $app['vkrequest']->encodeJson($result);
 })->bind('get');
 
-$app->get('/download/{attachment}/', function ($attachment) use ($app) {
+$app->get('/download/{attachment}', function (Application $app, Request $request, $attachment) use ($app) {
     $attachment = json_decode(urldecode($attachment));
+
     $audio = new Audio();
-    $request = new \VkUtils\Request();
-    $audio->setArtist($request->sanitizeParam($attachment->artist));
-    $audio->setTitle($request->sanitizeParam($attachment->title));
-    $audio->setLink($request->sanitizeParam($attachment->link));
+    $audio->setArtist($app['vkrequest']->sanitizeParam($attachment->artist));
+    $audio->setTitle($app['vkrequest']->sanitizeParam($attachment->title));
+    $audio->setLink($app['vkrequest']->sanitizeParam($attachment->link));
 
     try {
-        $downloader = new Downloader();
-        $downloader->download($audio);
+        $app['downloader']->download($audio);
     } catch (Exception $e) {
         $app['monolog']->addError($e->getMessage());
     }

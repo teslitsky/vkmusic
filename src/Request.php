@@ -7,12 +7,11 @@ use GuzzleHttp\Message\ResponseInterface as GuzzleRequest;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class Request implements RequestInterface
 {
     /**
-     * @var SerializerInterface
+     * @var Serializer
      */
     private $serializer;
 
@@ -23,8 +22,8 @@ class Request implements RequestInterface
 
     public function __construct()
     {
-        $encoders = array(new JsonEncoder());
-        $normalizers = array(new GetSetMethodNormalizer());
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new GetSetMethodNormalizer()];
         $this->serializer = new Serializer($normalizers, $encoders);
         $this->client = new Client();
     }
@@ -55,11 +54,12 @@ class Request implements RequestInterface
 
     /**
      * @param string $param Input param for sanitize
+     * @param int $flag Filtering flag
      * @return string Sanitized param
      */
-    public function sanitizeParam($param)
+    public function sanitizeParam($param, $flag = FILTER_SANITIZE_STRING)
     {
-        return html_entity_decode(filter_var($param, FILTER_SANITIZE_STRING));
+        return html_entity_decode(filter_var($param, $flag));
     }
 
     /**
